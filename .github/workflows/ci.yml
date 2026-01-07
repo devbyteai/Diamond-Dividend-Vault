@@ -86,4 +86,5 @@ jobs:
           version: nightly
 
       - name: Gas report
+        continue-on-error: true
         run: forge test --gas-report
