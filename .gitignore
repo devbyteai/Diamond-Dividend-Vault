@@ -1,0 +1,28 @@
+# Compiler output
+cache/
+out/
+
+# Dependencies
+node_modules/
+
+# Broadcast (deployment artifacts)
+broadcast/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+lcov.info

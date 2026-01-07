@@ -1,0 +1,56 @@
+name: Security Analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  slither:
+    name: Slither Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.4.0
+        continue-on-error: true
+        with:
+          target: 'src/'
+          slither-args: '--filter-paths "lib/" --exclude-dependencies'
+          fail-on: 'none'
+
+  aderyn:
+    name: Aderyn Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Aderyn
+        run: cargo install aderyn --locked
+
+      - name: Run Aderyn
+        continue-on-error: true
+        run: aderyn . --output aderyn-report.md
+
+      - name: Upload Aderyn Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aderyn-report
+          path: aderyn-report.md
